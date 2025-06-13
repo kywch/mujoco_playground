@@ -1,0 +1,41 @@
+[project]
+channels = ["pytorch", "nvidia", "conda-forge"]
+name = "mujoco_playground"
+platforms = ["linux-64"]
+
+[system-requirements]
+cuda = "12.1"
+
+[activation]
+scripts = ["env_setup.sh"]
+
+[dependencies]
+python = ">=3.11,<3.12"
+git = ">=2.49.0,<3"
+
+pytorch = "*"
+pytorch-cuda = "==12.1"
+cuda-version = "12.1.*"
+cuda-toolkit = "==12.1"
+cudnn = ">=9.3.0.75,<10"
+
+# mujoco playground
+lxml = ">=5.4.0,<6"
+tqdm = ">=4.67.1,<5"
+
+[pypi-dependencies]
+# See https://github.com/vincekurtz/hydrax/issues/53#issuecomment-2911613450
+# Related to: jaxlib._jax.XlaRuntimeError: INTERNAL: cuSolver internal error with backend_compile()
+jax = { version = "==0.5.3", extras = ["cuda12-local"] }
+
+brax = ">=0.12.1,<1"
+mujoco = ">=3.2.7,<4"
+mujoco-mjx = ">=3.2.7,<4"
+ml-collections = ">=1.1.0,<2"
+
+mediapy = ">=1.2.4,<2"
+matplotlib = ">=3.10.3,<4"
+
+[tasks]
+test_torch = "python -c 'import torch; print(torch.cuda.is_available())'"
+test_jax = "python -c 'import jax; print(jax.devices())'"
