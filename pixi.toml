@@ -20,9 +20,9 @@ wheel = "*"
 git = "*"
 
 # For jax/rsl-rl trainers
-mediapy = ">=1.2.4,<2"
-wandb = ">=0.21.0,<0.22"
-tensorboard = ">=2.20.0,<3"
+mediapy = "*"
+wandb = "*"
+tensorboard = "*"
 
 [pypi-dependencies]
 torch = { index = "https://download.pytorch.org/whl/cu121" }
