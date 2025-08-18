@@ -1,10 +1,10 @@
 [project]
-channels = ["pytorch", "nvidia", "conda-forge"]
+channels = ["nvidia", "conda-forge"]
 name = "mujoco_playground"
 platforms = ["linux-64"]
 
 [system-requirements]
-cuda = "12.1"
+cuda = "12"
 
 [activation.env]
 CUDA_HOME = "$CONDA_PREFIX"
@@ -19,16 +19,19 @@ setuptools = "*"
 wheel = "*"
 git = "*"
 
-# CUDA
-cuda-version = "12.1.*"
-# cuda-toolkit = "==12.1.1"
-pytorch-cuda = "==12.1"
+# For jax/rsl-rl trainers
+mediapy = ">=1.2.4,<2"
+wandb = ">=0.21.0,<0.22"
+tensorboard = ">=2.20.0,<3"
 
 [pypi-dependencies]
-# torch = { index = "https://download.pytorch.org/whl/cu121" }
-# torchvision = { index = "https://download.pytorch.org/whl/cu121" }
-# torchaudio = { index = "https://download.pytorch.org/whl/cu121" }
+torch = { index = "https://download.pytorch.org/whl/cu121" }
+torchvision = { index = "https://download.pytorch.org/whl/cu121" }
+torchaudio = { index = "https://download.pytorch.org/whl/cu121" }
 jax = { extras = ["cuda12"] }
+
+rsl-rl-lib = "<3"
+
 # playground = { path = ".", editable = true }
 playground = "*"
 
