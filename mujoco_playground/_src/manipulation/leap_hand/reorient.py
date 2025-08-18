@@ -67,6 +67,9 @@ def default_config() -> config_dict.ConfigDict:
           pert_duration_steps=[1, 100],
           pert_wait_steps=[60, 150],
       ),
+      impl='jax',
+      nconmax=30 * 8192,
+      njmax=128,
   )
 
 
@@ -87,9 +90,9 @@ class CubeReorient(leap_hand_base.LeapHandEnv):
 
   def _post_init(self) -> None:
     home_key = self._mj_model.keyframe("home")
-    self._init_q = jp.array(home_key.qpos)
-    self._init_mpos = jp.array(home_key.mpos)
-    self._init_mquat = jp.array(home_key.mquat)
+    self._init_q = jp.array(home_key.qpos, dtype=float)
+    self._init_mpos = jp.array(home_key.mpos, dtype=float)
+    self._init_mquat = jp.array(home_key.mquat, dtype=float)
     self._lowers = self._mj_model.actuator_ctrlrange[:, 0]
     self._uppers = self._mj_model.actuator_ctrlrange[:, 1]
     self._hand_qids = mjx_env.get_qpos_ids(self.mj_model, consts.JOINT_NAMES)
@@ -126,13 +129,16 @@ class CubeReorient(leap_hand_base.LeapHandEnv):
 
     qpos = jp.concatenate([q_hand, q_cube])
     qvel = jp.concatenate([v_hand, v_cube])
-    data = mjx_env.init(
-        self.mjx_model,
+    data = mjx_env.make_data(
+        self._mj_model,
         qpos=qpos,
         ctrl=q_hand,
         qvel=qvel,
         mocap_pos=self._init_mpos,
         mocap_quat=goal_quat,
+        impl=self._mjx_model.impl.value,
+        nconmax=self._config.nconmax,
+        njmax=self._config.njmax,
     )
 
     rng, pert1, pert2, pert3 = jax.random.split(rng, 4)
