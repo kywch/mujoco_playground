@@ -12,6 +12,10 @@ JAX_TRACEBACK_FILTERING = "off"
 JAX_DEFAULT_MATMUL_PRECISION = "highest"
 XLA_PYTHON_CLIENT_MEM_FRACTION = "0.3"
 
+# for headless rendering in docker
+DISPLAY = ":99"
+MUJOCO_GL = "egl"
+
 [dependencies]
 python = ">=3.12,<3.13"
 uv = "*"
