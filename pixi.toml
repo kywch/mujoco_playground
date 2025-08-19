@@ -1,4 +1,4 @@
-[project]
+[workspace]
 channels = ["nvidia", "conda-forge"]
 name = "mujoco_playground"
 platforms = ["linux-64"]
@@ -14,6 +14,7 @@ XLA_PYTHON_CLIENT_MEM_FRACTION = "0.3"
 
 [dependencies]
 python = ">=3.12,<3.13"
+uv = "*"
 pip = "*"
 setuptools = "*"
 wheel = "*"
@@ -25,15 +26,15 @@ wandb = "*"
 tensorboard = "*"
 
 [pypi-dependencies]
-torch = { index = "https://download.pytorch.org/whl/cu121" }
-torchvision = { index = "https://download.pytorch.org/whl/cu121" }
-torchaudio = { index = "https://download.pytorch.org/whl/cu121" }
+torch = { index = "https://download.pytorch.org/whl/cu128" }
+torchvision = { index = "https://download.pytorch.org/whl/cu128" }
+torchaudio = { index = "https://download.pytorch.org/whl/cu128" }
 jax = { extras = ["cuda12"] }
 
 rsl-rl-lib = "<3"
 
 # playground = { path = ".", editable = true }
-playground = "*"
+# playground = "*"
 
 [tasks]
 test_torch = "python -c 'import torch; print(torch.cuda.is_available())'"
