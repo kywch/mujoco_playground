@@ -13,7 +13,7 @@ JAX_DEFAULT_MATMUL_PRECISION = "highest"
 XLA_PYTHON_CLIENT_MEM_FRACTION = "0.3"
 
 # for headless rendering in docker
-DISPLAY = ":99"
+# DISPLAY = ":99"
 MUJOCO_GL = "egl"
 
 [dependencies]
@@ -28,6 +28,7 @@ git = "*"
 mediapy = "*"
 wandb = "*"
 tensorboard = "*"
+onnxruntime = ">=1.22.0,<2"
 
 [pypi-dependencies]
 torch = { index = "https://download.pytorch.org/whl/cu128" }
@@ -43,3 +44,4 @@ rsl-rl-lib = "<3"
 [tasks]
 test_torch = "python -c 'import torch; print(torch.cuda.is_available())'"
 test_jax = "python -c 'import jax; print(jax.devices())'"
+update_jax = "uv pip install -U 'jax[cuda12]'"
