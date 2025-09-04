@@ -68,6 +68,9 @@ _ENV_NAME = flags.DEFINE_string(
     f"Name of the environment. One of {', '.join(registry.ALL_ENVS)}",
 )
 _IMPL = flags.DEFINE_enum("impl", "jax", ["jax", "warp"], "MJX implementation")
+_NJMAX = flags.DEFINE_integer(
+    "njmax", None, "The maximum number of constraints per world."
+)
 _VISION = flags.DEFINE_boolean("vision", False, "Use vision input")
 _LOAD_CHECKPOINT_PATH = flags.DEFINE_string(
     "load_checkpoint_path", None, "Path to load checkpoint from"
@@ -206,6 +209,8 @@ def main(argv):
   # Load environment configuration
   env_cfg = registry.get_default_config(_ENV_NAME.value)
   env_cfg["impl"] = _IMPL.value
+  if _NJMAX.present:
+    env_cfg["njmax"] = _NJMAX.value
 
   ppo_params = get_rl_config(_ENV_NAME.value)
 
