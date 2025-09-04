@@ -24,12 +24,8 @@ setuptools = "*"
 wheel = "*"
 git = "*"
 
-# CUDA 12.0, torch 2.4.1
 # To use 50xx gpus, refer: https://github.com/kywch/puffer-pixi/blob/main/pixi_cu129.toml
-cuda-version = "12.0.*"
-pytorch-gpu = "*"
-torchvision = "*"
-torchaudio = "*"
+cuda-version = "12.1.*"
 
 # For jax/rsl-rl trainers
 mediapy = "*"
@@ -38,10 +34,14 @@ tensorboard = "*"
 onnxruntime = ">=1.22.0,<2"
 
 [pypi-dependencies]
+torch = { index = "https://download.pytorch.org/whl/cu121" }
+torchvision = { index = "https://download.pytorch.org/whl/cu121" }
+torchaudio = { index = "https://download.pytorch.org/whl/cu121" }
 jax = { extras = ["cuda12"] }
 rsl-rl-lib = "<3"
 
 # To install mujoco playground, run:
+# pixi run update_jax
 # uv pip install -e .
 
 # playground = { path = ".", editable = true }
