@@ -518,7 +518,7 @@ def domain_randomize(model: mjx.Model, rng: jax.Array):
         fingertip_friction
     )
 
-    # Scale cube size: *U(0.5, 1.5).
+    # Scale cube size: *U(0.8, 1.2).
     rng, key = jax.random.split(rng)
     geom_size = model.geom_size.at[cube_geom_id].set(
         model.geom_size[cube_geom_id] * jax.random.uniform(key, minval=0.5, maxval=1.5)
@@ -533,9 +533,9 @@ def domain_randomize(model: mjx.Model, rng: jax.Array):
         model.body_mass[cube_body_id] * jax.random.uniform(key2, minval=0.5, maxval=1.5)
     )
 
-    # Jitter cube qpos: +U(-0.005, 0.005).
+    # Jitter cube qpos: +U(-0.02, 0.02).
     rng, key = jax.random.split(rng)
-    dpos = jax.random.uniform(key, (3,), minval=-5e-3, maxval=5e-3)
+    dpos = jax.random.uniform(key, (3,), minval=-2e-2, maxval=2e-2)
     body_ipos = model.body_ipos.at[cube_body_id].set(
         model.body_ipos[cube_body_id] + dpos
     )
