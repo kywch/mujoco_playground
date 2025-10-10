@@ -52,7 +52,7 @@ def default_config() -> config_dict.ConfigDict:
           scales=config_dict.create(
               orientation=5.0,
               position=0.5,
-              termination=-100.0,
+              termination=-1000.0,
               hand_pose=-0.5,
               action_rate=-0.001,
               joint_vel=0.0,
@@ -61,7 +61,7 @@ def default_config() -> config_dict.ConfigDict:
           success_reward=100.0,
       ),
       pert_config=config_dict.create(
-          enable=False,
+          enable=True,
           linear_velocity_pert=[0.0, 3.0],
           angular_velocity_pert=[0.0, 0.5],
           pert_duration_steps=[1, 100],
@@ -69,7 +69,7 @@ def default_config() -> config_dict.ConfigDict:
       ),
       impl='jax',
       nconmax=30 * 8192,
-      njmax=128,
+      njmax=300,
   )
 
 
@@ -518,19 +518,19 @@ def domain_randomize(model: mjx.Model, rng: jax.Array):
         fingertip_friction
     )
 
-    # Scale cube size: *U(0.8, 1.2).
+    # Scale cube size: *U(0.9, 1.1).
     rng, key = jax.random.split(rng)
     geom_size = model.geom_size.at[cube_geom_id].set(
-        model.geom_size[cube_geom_id] * jax.random.uniform(key, minval=0.5, maxval=1.5)
+        model.geom_size[cube_geom_id] * jax.random.uniform(key, minval=0.9, maxval=1.1)
     )
 
-    # Scale cube mass: *U(0.5, 1.5).
+    # Scale cube mass: *U(0.9, 1.1).
     rng, key1, key2 = jax.random.split(rng, 3)
     body_inertia = model.body_inertia.at[cube_body_id].set(
-        model.body_inertia[cube_body_id] * jax.random.uniform(key1, minval=0.5, maxval=1.5)
+        model.body_inertia[cube_body_id] * jax.random.uniform(key1, minval=0.9, maxval=1.1)
     )
     body_mass = model.body_mass.at[cube_body_id].set(
-        model.body_mass[cube_body_id] * jax.random.uniform(key2, minval=0.5, maxval=1.5)
+        model.body_mass[cube_body_id] * jax.random.uniform(key2, minval=0.9, maxval=1.1)
     )
 
     # Jitter cube qpos: +U(-0.02, 0.02).
@@ -540,25 +540,25 @@ def domain_randomize(model: mjx.Model, rng: jax.Array):
         model.body_ipos[cube_body_id] + dpos
     )
 
-    # Jitter qpos0: +U(-0.05, 0.05).
+    # Jitter qpos0: +U(-0.1, 0.1).
     rng, key = jax.random.split(rng)
     qpos0 = model.qpos0
     qpos0 = qpos0.at[hand_qids].set(
         qpos0[hand_qids]
-        + jax.random.uniform(key, shape=(16,), minval=-0.05, maxval=0.05)
+        + jax.random.uniform(key, shape=(16,), minval=-0.1, maxval=0.1)
     )
 
-    # Scale static friction: *U(0.9, 1.1).
+    # Scale static friction: *U(0.8, 1.2).
     rng, key = jax.random.split(rng)
     frictionloss = model.dof_frictionloss[hand_qids] * jax.random.uniform(
-        key, shape=(16,), minval=0.5, maxval=2.0
+        key, shape=(16,), minval=0.8, maxval=1.2
     )
     dof_frictionloss = model.dof_frictionloss.at[hand_qids].set(frictionloss)
 
-    # Scale armature: *U(1.0, 1.05).
+    # Scale armature: *U(0.9, 1.1).
     rng, key = jax.random.split(rng)
     armature = model.dof_armature[hand_qids] * jax.random.uniform(
-        key, shape=(16,), minval=1.0, maxval=1.05
+        key, shape=(16,), minval=0.9, maxval=1.1
     )
     dof_armature = model.dof_armature.at[hand_qids].set(armature)
 

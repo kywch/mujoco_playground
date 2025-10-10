@@ -47,6 +47,7 @@ xla_flags = os.environ.get("XLA_FLAGS", "")
 xla_flags += " --xla_gpu_triton_gemm_any=True"
 os.environ["XLA_FLAGS"] = xla_flags
 os.environ["XLA_PYTHON_CLIENT_PREALLOCATE"] = "false"
+os.environ["TF_GPU_ALLOCATOR"] = "cuda_malloc_async"
 os.environ["MUJOCO_GL"] = "egl"
 
 # Ignore the info logs from brax
@@ -65,6 +66,7 @@ warnings.filterwarnings("ignore", category=UserWarning, module="absl")
 _ENV_NAME = flags.DEFINE_string(
     "env_name",
     "LeapCubeReorient",
+    # "LeapCubeRotateZAxis",
     f"Name of the environment. One of {', '.join(registry.ALL_ENVS)}",
 )
 _IMPL = flags.DEFINE_enum("impl", "jax", ["jax", "warp"], "MJX implementation")
