@@ -512,26 +512,26 @@ def domain_randomize(model: mjx.Model, rng: jax.Array):
   @jax.vmap
   def rand(rng):
     rng, key = jax.random.split(rng)
-    # Fingertip friction: =U(0.5, 1.0).
-    fingertip_friction = jax.random.uniform(key, (1,), minval=0.5, maxval=1.0)
+    # Fingertip friction: =U(0.5, 1.5).
+    fingertip_friction = jax.random.uniform(key, (1,), minval=0.5, maxval=1.5)
     geom_friction = model.geom_friction.at[fingertip_geom_ids, 0].set(
         fingertip_friction
     )
 
-    # Scale cube size: *U(0.9, 1.1).
-    rng, key = jax.random.split(rng)
-    geom_size = model.geom_size.at[cube_geom_id].set(
-        model.geom_size[cube_geom_id] * jax.random.uniform(key, minval=0.9, maxval=1.1)
-    )
+    # # Scale cube size: *U(0.9, 1.1).
+    # rng, key = jax.random.split(rng)
+    # geom_size = model.geom_size.at[cube_geom_id].set(
+    #     model.geom_size[cube_geom_id] * jax.random.uniform(key, minval=0.9, maxval=1.1)
+    # )
 
-    # Scale cube mass: *U(0.9, 1.1).
-    rng, key1, key2 = jax.random.split(rng, 3)
-    body_inertia = model.body_inertia.at[cube_body_id].set(
-        model.body_inertia[cube_body_id] * jax.random.uniform(key1, minval=0.9, maxval=1.1)
-    )
-    body_mass = model.body_mass.at[cube_body_id].set(
-        model.body_mass[cube_body_id] * jax.random.uniform(key2, minval=0.9, maxval=1.1)
-    )
+    # # Scale cube mass: *U(0.9, 1.1).
+    # rng, key1, key2 = jax.random.split(rng, 3)
+    # body_inertia = model.body_inertia.at[cube_body_id].set(
+    #     model.body_inertia[cube_body_id] * jax.random.uniform(key1, minval=0.9, maxval=1.1)
+    # )
+    # body_mass = model.body_mass.at[cube_body_id].set(
+    #     model.body_mass[cube_body_id] * jax.random.uniform(key2, minval=0.9, maxval=1.1)
+    # )
 
     # Jitter cube qpos: +U(-0.02, 0.02).
     rng, key = jax.random.split(rng)
@@ -567,8 +567,9 @@ def domain_randomize(model: mjx.Model, rng: jax.Array):
     dmass = jax.random.uniform(
         key, shape=(len(hand_body_ids),), minval=0.9, maxval=1.1
     )
-    body_mass = body_mass.at[hand_body_ids].set(
-        body_mass[hand_body_ids] * dmass
+    # body_mass = body_mass.at[hand_body_ids].set(
+    body_mass = model.body_mass.at[hand_body_ids].set(
+        model.body_mass[hand_body_ids] * dmass
     )
 
     # Joint stiffness: *U(0.8, 1.2).
@@ -588,9 +589,9 @@ def domain_randomize(model: mjx.Model, rng: jax.Array):
 
     return (
         geom_friction,
-        geom_size,
+        # geom_size,
         body_mass,
-        body_inertia,
+        # body_inertia,
         body_ipos,
         qpos0,
         dof_frictionloss,
@@ -602,9 +603,9 @@ def domain_randomize(model: mjx.Model, rng: jax.Array):
 
   (
       geom_friction,
-      geom_size,
+    #   geom_size,
       body_mass,
-      body_inertia,
+    #   body_inertia,
       body_ipos,
       qpos0,
       dof_frictionloss,
@@ -617,9 +618,9 @@ def domain_randomize(model: mjx.Model, rng: jax.Array):
   in_axes = jax.tree_util.tree_map(lambda x: None, model)
   in_axes = in_axes.tree_replace({
       "geom_friction": 0,
-      "geom_size": 0,
+    #   "geom_size": 0,
       "body_mass": 0,
-      "body_inertia": 0,
+    #   "body_inertia": 0,
       "body_ipos": 0,
       "qpos0": 0,
       "dof_frictionloss": 0,
@@ -631,9 +632,9 @@ def domain_randomize(model: mjx.Model, rng: jax.Array):
 
   model = model.tree_replace({
       "geom_friction": geom_friction,
-      "geom_size": geom_size,
+    #   "geom_size": geom_size,
       "body_mass": body_mass,
-      "body_inertia": body_inertia,
+    #   "body_inertia": body_inertia,
       "body_ipos": body_ipos,
       "qpos0": qpos0,
       "dof_frictionloss": dof_frictionloss,

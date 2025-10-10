@@ -42,12 +42,28 @@
         <geom size="0.01 0.012 0.016" pos="-0.00127744 -0.0455619 -0.0144774" quat="0.708101 0.705072 -0.0294902 -0.024426" type="box" friction="0.7 0.05 0.0002" rgba=".5 .5 .5 .3"/>
       </default>
 
-      <position kp="3.0" inheritrange="1"/>
+      <!-- <position kp="3.0" inheritrange="1"/> -->
       <!-- armature = rotor inertia * gear ratio^2 = 1.7 * 1e-8 * 288*288 = 0.00149376 -->
       <!-- max torque = 0.2196 = 600/1000*0.366 -->
       <!-- frictionloss = rough guess, small ish value -->
       <!-- <joint axis="0 0 -1" damping="0.2" armature="0.00149376" frictionloss="0.02" actuatorfrcrange="-0.2196 0.2196"/> -->
-      <joint axis="0 0 -1" damping="0.2" armature="0.00149376" actuatorfrcrange="-0.2196 0.2196" frictionloss="0.02"/>
+      <!-- <joint axis="0 0 -1" damping="0.2" armature="0.00149376" actuatorfrcrange="-0.2196 0.2196" frictionloss="0.02"/> -->
+
+      <!-- For kP=300, kD=150 -->
+      <position kp="0.6" inheritrange="1"/>
+      <joint axis="0 0 -1" damping="0.017" armature="0.00149376" actuatorfrcrange="-0.24 0.24" frictionloss="0.02"/>
+
+      <!-- For kP=600, kD=200 -->
+      <!--
+      <position kp="0.9" inheritrange="1"/>
+      <joint axis="0 0 -1" damping="0.017" armature="0.00149376" actuatorfrcrange="-0.28 0.28" frictionloss="0.0524"/>
+      -->
+
+      <!-- For kP=150, kD=50 -->
+      <!--
+      <position kp="0.3" inheritrange="1"/>
+      <joint axis="0 0 -1" damping="0.015" armature="0.00149376" actuatorfrcrange="-0.24 0.24" frictionloss="0.0146"/>
+      -->
 
       <default class="mcp">
         <joint range="-0.314 2.23"/>
